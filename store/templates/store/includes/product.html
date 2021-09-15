@@ -1,0 +1,17 @@
+{% load static %}
+
+<li>
+  <article class="product">
+    <a href="#">
+      <img src="{% static "shop/images/"|add:product.image %}" alt="{{ product.name }}"
+      />
+      <div class="product__content">
+        <h3>{{ product.name }}</h3>
+        <h3>{{ product.price }}</h3>
+        <p>
+          {{ product.desc }}
+        </p>
+      </div>
+    </a>
+  </article>
+</li>

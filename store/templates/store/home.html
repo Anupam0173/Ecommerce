@@ -1,0 +1,36 @@
+{% extends "Ecommerce/base.html" %} 
+{% load static %}
+
+{% block title %} 
+My Shop
+{% endblock %} 
+
+{% block css_files %}
+  <link rel="stylesheet" href="{% static "shop/css/product.css" %}" />
+{% endblock %}
+
+{% block content %}
+
+<div class="container">
+    <div class="row">
+              {% for product in products %}
+                <div class="col-sm-4 my-3">
+                  <div class="card shadow" style="width: 22rem;">
+<!--                    <img src="/media/{{blog.image.url}}" class="card-img-top rounded" style="height:18rem;" alt="...">-->
+                      <img src="{{product.image.url}}" class="card-img-top rounded" style="height:18rem;" alt="...">
+                    <div class="card-body">
+                          {% if product.name|length >= 30 %}
+                                <h5 class="card-title">{{product.name|slice:":30"}} ....</h5>
+                          {% else %}
+                               <h5 class="card-title">{{product.name}}</h5>
+                          {% endif %}
+                        <p class="card-text"><strong>Price :-</strong>{{product.price}}</p>
+                      {% comment %} <a href="{% url 'blog_detail' blog.id %}" class="btn btn-primary">Read More</a> {% endcomment %}
+                    </div>
+                  </div>
+                </div>
+              {% endfor %}
+    </div>
+</div>
+
+{% endblock %}

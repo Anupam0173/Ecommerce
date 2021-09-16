@@ -1,4 +1,4 @@
-.product {
+/* .product {
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -40,5 +40,10 @@
   .product:hover time,
   .product:active time {
     color: white;
-  }
+  } */
   
+
+
+.prod:hover{
+  transform: scale(1.1);
+}

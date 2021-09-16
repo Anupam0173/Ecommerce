@@ -1,6 +1,5 @@
 from django.db import models
 from django.contrib.auth.models import User
-# Create your models here.
 
 
 class customer(models.Model):
@@ -10,15 +9,24 @@ class customer(models.Model):
     email = models.EmailField(max_length=100)
     is_company_staff = models.BooleanField(default=False)
 
-    def __str__(self):
-        return self.name
 
-
-class product(models.Model):
+class Product(models.Model):
     name = models.CharField(max_length=100)
     price = models.FloatField()
     desc = models.TextField(blank=True)
     image = models.ImageField(upload_to='shop/images', default='')
 
-    def __str__(self):
-        return self.name
+
+# class order(models.Model):
+#     customer = models.ForeignKey(
+#         customer, on_delete=models.SET_NULL, null=True, blank=True)
+#     date_ordered = models.DateTimeField(auto_now_add=True)
+#     complete = models.BooleanField(default=False)
+
+
+# class orderItem(models.Model):
+#     product = models.ForeignKey(
+#         Product, on_delete=models.SET_NULL, null=True, blank=True)
+#     order = models.ForeignKey(order, on_delete=models.SET_NULL, null=True)
+#     quantity = models.IntegerField(default=0, null=True, blank=True)
+#     date_added = models.DateTimeField(auto_now_add=True)

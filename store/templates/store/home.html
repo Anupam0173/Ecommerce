@@ -1,6 +1,6 @@
 {% extends "Ecommerce/base.html" %} 
 {% load static %}
-
+{% load cart %}
 {% block title %} 
 My Shop
 {% endblock %} 
@@ -11,26 +11,87 @@ My Shop
 
 {% block content %}
 
-<div class="container">
-    <div class="row">
-              {% for product in products %}
-                <div class="col-sm-4 my-3">
-                  <div class="card shadow" style="width: 22rem;">
-<!--                    <img src="/media/{{blog.image.url}}" class="card-img-top rounded" style="height:18rem;" alt="...">-->
-                      <img src="{{product.image.url}}" class="card-img-top rounded" style="height:18rem;" alt="...">
-                    <div class="card-body">
-                          {% if product.name|length >= 30 %}
-                                <h5 class="card-title">{{product.name|slice:":30"}} ....</h5>
-                          {% else %}
-                               <h5 class="card-title">{{product.name}}</h5>
-                          {% endif %}
-                        <p class="card-text"><strong>Price :-</strong>{{product.price}}</p>
-                      {% comment %} <a href="{% url 'blog_detail' blog.id %}" class="btn btn-primary">Read More</a> {% endcomment %}
-                    </div>
-                  </div>
-                </div>
-              {% endfor %}
-    </div>
-</div>
+
+		<!-- all products -->
+		<div id='products' class="col-lg-9 mx-auto my-5">
+			<div class="row mx-auto">
+				{% for product in products %}
+				<div class="card mx-auto mb-3" id={{product.id}} style="width: 18rem;">
+					<img class="card-img-top" src="{{product.image.url}}" alt="Card image cap">
+					<div class="card-body">
+						<p class="card-title">{{product.name}}</p>
+						<p class="card-text"><b>{{product.price|currency}}</b></p>
+						<!-- {{product | is_in_cart:request.session.cart }} -->
+					</div>
+          <a href="{% url 'view_product' product.id %}" class="btn btn-primary my-2">View Product</a>
+
+
+					<div class="card-footer p-0 no-gutters">
+
+						{% if product|is_in_cart:request.session.cart %}
+						<div class="row no-gutters">
+							<form action="" class="col-2 " method="post">
+								{% csrf_token %}
+								<input hidden type="text" name='product' value='{{product.id}}'>
+								<input hidden type="text" name='remove' value='True'>
+								<input type="submit" value=" - " class="btn btn-block btn-success border-right">
+							</form>
+							<div class="text-center col btn btn-success">{{product|cart_quantity:request.session.cart}} in Cart</div>
+							<form action="" class="col-2 " method="post">
+								{% csrf_token %}
+								<input hidden type="text" name='product' value='{{product.id}}'>
+								<input type="submit" value=" + " class="btn btn-block btn-success border-left">
+							</form>
+						</div>
+						{% else %}
+						<form action="" method="POST" class="btn-block">
+							{% csrf_token %}
+							<input hidden type="text" name='product' value='{{product.id}}'>
+							<input type="submit" class="float-right btn btn-success form-control"
+								value="Add To Cart">
+						</form>
+						{% endif %}
+
+					</div>
+
+
+				</div>
+				{% endfor %}
+			</div>
+		</div>
+
+
+
+{% endblock %}
+
+{% block js %}
+{% comment %} 
+if (localStorage.getItem('cart_item') == null) {
+    var cart_item = {};
+} else {
+    cart_item = JSON.parse(localStorage.getItem('cart_item'));
+   
+}
+
+console.log("workign js")
+
+$('.addProd').click(function(){
+  console.log("ckicked")
+  var idstr=this.id.toString();
+  console.log(idstr)
+  if(cart_item[idstr]!=undefined)
+  {
+    cart_item[idstr]=cart_item[idstr]+1
+  }
+  else
+  {
+    cart_item[idstr]=1;
+    document.getElementById('cart_item').innerHTML=Object.keys(cart_item).length;
+    
+  }
+  console.log(cart_item)
+  localStorage.setItem('cart_item',JSON.stringify(cart_item))
+}) {% endcomment %}
+
 
 {% endblock %}

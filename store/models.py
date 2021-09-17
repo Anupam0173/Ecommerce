@@ -2,12 +2,9 @@ from django.db import models
 from django.contrib.auth.models import User
 
 
-class customer(models.Model):
-    user = models.OneToOneField(
-        User, on_delete=models.CASCADE, null=True, blank=True)
-    name = models.CharField(max_length=80, null=True, blank=True)
-    email = models.EmailField(max_length=100)
-    is_company_staff = models.BooleanField(default=False)
+# class Customer(User):
+#     mobile_no = models.CharField(
+#         max_length=14, null=True, blank=True, default='SOME STRING')
 
 
 class Product(models.Model):

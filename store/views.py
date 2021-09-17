@@ -1,6 +1,9 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, HttpResponseRedirect
 from .models import Product
-# Create your views here.
+from django.contrib import messages
+from .forms import LoginForm, SignUpForm
+from django.contrib.auth import logout, authenticate
+from django.contrib.auth import login as auth_login
 
 
 def home(request):
@@ -45,12 +48,47 @@ def home(request):
 
 
 def cart(request):
-    return render(request, 'store/cart.html')
+    ids = list(request.session.get('cart').keys())
+    products = Product.objects.filter(id__in=ids)
+    print(products)
+    return render(request, 'store/cart.html', {'products': products})
 
 
 def view_product(request, id):
     context = {'product': Product.objects.get(pk=id)}
     return render(request, 'store/product_detail.html', context)
 
-# def customer_login(request):
-#     return render(request, 'store/login.html')
+
+# Sigup
+def signup(request):
+    if request.method == "POST":
+        form = SignUpForm(request.POST)
+        if form.is_valid():
+            messages.success(
+                request, 'Congratulations!! Your Account has been created successfully.')
+            form.save()
+    else:
+        form = SignUpForm()
+    return render(request, 'store/signup.html', {'form': form})
+
+
+def login(request):
+    if request.method == "POST":
+        form = LoginForm(request=request, data=request.POST)
+        if form.is_valid():
+            uname = form.cleaned_data['username']
+            upass = form.cleaned_data['password']
+            user = authenticate(username=uname, password=upass)
+            if user is not None:
+                auth_login(request, user)
+                messages.success(request, 'Logged in Successfully !!')
+                return HttpResponseRedirect('/')
+    else:
+        form = LoginForm()
+    return render(request, 'store/login.html', {'form': form})
+
+
+# Logout
+def user_logout(request):
+    logout(request)
+    return HttpResponseRedirect('/')

@@ -1,29 +1,54 @@
-<nav class="navbar navbar-dark bg-dark navbar-expand-lg ">
+<nav class="navbar navbar-expand-lg navbar-success bg-success" id="navbar">
   <div class="container-fluid">
-    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarTogglerDemo03" aria-controls="navbarTogglerDemo03" aria-expanded="false" aria-label="Toggle navigation">
-      <span class="navbar-toggler-icon"></span>
-    </button>
-    <a class="navbar-brand" href="#">Navbar</a>
-    <div class="collapse navbar-collapse" id="navbarTogglerDemo03">
-      <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-        <li class="nav-item">
-          <a class="nav-link active" aria-current="page" href="{% url 'home' %}">Home</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" href="#">Link</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link disabled" href="#" tabindex="-1" aria-disabled="true">Disabled</a>
-        </li>
+
+
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav mr-auto">
+
+        {% if request.user.is_authenticated %}
+            <li class="nav-item" onclick="color()">
+              <a class="nav-link navbar-brand {% if request.path == home %} active {% endif %}" href="/">Home ({{request.user.username}})</a>
+            </li>
+
+            {% else %}
+            <li class="nav-item" onclick="color()">
+                <a class="nav-link navbar-brand {% if request.path == home %} active {% endif %}" href="/">Home <span class="sr-only"></span></a>
+            </li>
+            <li class="nav-item" onclick="color()">
+              <a class="nav-link navbar-brand {% if request.path == signup %} active {% endif %}" href="{% url 'signup' %}">Signup/Registration</a>
+            </li>
+            <li class="nav-item" onclick="color()">
+              <a class="nav-link navbar-brand {% if request.path == login %} active {% endif %}" href="{% url 'login' %}">Login</a>
+            </li>
+            {% endif %}
+
+            <li class="nav-item" onclick="color()">
+              <a class="nav-link navbar-brand {% if request.path == about %} active {% endif %}" href="#">About</a>
+            </li>
+            <li class="nav-item" onclick="color()">
+              <a class="nav-link navbar-brand {% if request.path == contact %} active {% endif %}" href="#">Contact</a>
+            </li>
+            {% if request.user.is_authenticated %}
+              <li class="nav-item" onclick="color()">
+                  <a class="nav-link navbar-brand {% if request.path == logout %} active {% endif %}" href="{% url 'logout' %}">Logout</a>
+              </li>
+            {% endif %}
+
       </ul>
-      <form class="d-flex">
-        <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
-        <button class="btn btn-outline-success" type="submit">Search</button>
-      </form>
-      <a href="{% url 'cart' %}"><i class="fas fa-3x mx-2 fa-cart-plus"></i>
-        <span class="badge badge-sucess">{{request.session.cart.keys|length}}</span>
-      </a>
+
+
+            <ul class=" navbar-nav my-2 my-lg-0">
+                  <li class="nav-item" onclick="color()">
+                      <a href="{% url 'cart' %}" class="nav-link navbar-brand">Cart
+                          <span class="badge badge-sucess">{{request.session.cart.keys|length}}</span>
+                        </a>
+                  </li>
+            </ul>
     </div>
-  </div> 
+
+
+  </div>
 </nav>
+
+
 
